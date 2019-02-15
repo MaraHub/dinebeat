@@ -1,0 +1,182 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="apple-touch-icon" sizes="180x180" href="/static/assets/ico/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/static/assets/ico/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/static/assets/ico/favicon-16x16.png">
+	<link rel="manifest" href="/static/assets/ico/manifest.json">
+	<link rel="mask-icon" href="/static/assets/ico/safari-pinned-tab.svg" color="#5bbad5">
+	<link rel="shortcut icon" href="/static/assets/ico/favicon.ico">
+	<meta name="msapplication-config" content="/static/assets/ico/browserconfig.xml">
+	<meta name="theme-color" content="#ffffff">
+
+	<title>Menu</title>
+
+	<!-- CSS Plugins -->
+	<link rel="stylesheet" href="/static/assets/plugins/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/static/assets/plugins/lightbox/css/lightbox.min.css">
+	<link rel="stylesheet" href="/static/assets/plugins/flickity/flickity.min.css">
+
+	<!-- CSS Global -->
+	<!-- build:css static/assets/css/theme.min.css -->
+	<link rel="stylesheet" href="/static/assets/css/theme.css">
+	<!-- endbuild -->
+
+  </head>
+  <body>
+
+
+
+
+	<!-- NAVBAR
+	================================================== -->
+
+  <nav class="navbar navbar-light navbar-expand-lg fixed-top">
+		<div class="container">
+
+			<!-- Navbar: Brand -->
+			<a class="navbar-brand d-lg-none" href="{{url_for('mainpage')}}">Dinebeat</a>
+
+			<!-- Navbar: Toggler -->
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<!-- Navbar: Collapse -->
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+				<!-- Navbar navigation: Left -->
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="{{url_for('mainpage')}}">σχετικα με μας</a>
+					</li>
+					<!-- <li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="http://example.com" id="nav-item__menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Menu
+						</a>
+						<div class="dropdown-menu" aria-labelledby="nav-item__menu">
+							<a class="dropdown-item" href="menu.html">Menu: Ena</a>
+							<a class="dropdown-item" href="menu_no-images.html">Menu: Dyo</a>
+						</div>
+					</li> -->
+					<li class="nav-item">
+						<a class="nav-link" href="#section_reservation">κωδικος</a>
+					</li>
+				</ul>
+
+				<!-- Navbar: Brand -->
+				<a class="navbar-brand d-none d-lg-flex" href="{{url_for('mainpage')}}">
+					Dinebeat
+				</a>
+
+				<!-- Navbar navigation: Right -->
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="news-and-events.html">νεα</a>
+					</li>
+					<!-- <li class="nav-item">
+						<a class="nav-link" href="gallery.html">Gallery</a>
+					</li> -->
+					<li class="nav-item">
+						<a class="nav-link" href="{{url_for('mainpage')}}">επικοινωνια</a>
+					</li>
+				</ul>
+
+			</div> <!-- / .navbar-collapse -->
+
+		</div> <!-- / .container -->
+	</nav> <!-- / .navbar -->
+
+{%block content%} {% endblock%}
+  <!-- FOOTER
+  ================================================== -->
+  <footer class="section section_footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+
+          <!-- About Us -->
+          <h5 class="section_footer__heading">
+            Σχετικα με τη SaveFood
+          </h5>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corrupti dolorum, sint corporis nostrum, possimus unde eos vitae eius quasi saepe.
+          </p>
+
+        </div>
+        <div class="col-sm-6">
+
+          <!-- Contact info -->
+          <h5 class="section_footer__heading">
+            επικοινωνια
+          </h5>
+          <ul class="section_footer__info">
+            <li>
+              <i class="fa-map-marker"></i>
+            </li>
+            <li>
+              <i class="fa-phone"></i> +210 88457123
+            </li>
+            <li>
+              <i class="fa-envelope-o"></i> <a href="mailto:admin@savefood.com">admin@domain.com</a>
+            </li>
+          </ul>
+
+        </div>
+        <div class="col-sm-4">
+
+          <!-- Opening hours -->
+          <!-- <h5 class="section_footer__heading">
+            Opening hours
+          </h5>
+          <div class="section_footer__open">
+            <div class="section_footer__open__days">Monday - Thursday</div>
+            <div class="section_footer__open__time">10:00 AM - 11:00 PM</div>
+          </div>
+          <div class="section_footer__open">
+            <div class="section_footer__open__days">Friday - Sunday</div>
+            <div class="section_footer__open__time">12:00 AM - 03:00 AM</div>
+          </div> -->
+
+        </div>
+      </div> <!-- / .row -->
+      <div class="row">
+        <div class="col-12">
+
+          <!-- Copyright -->
+          <div class="section_footer__copyright">
+            <i class="fa fa-copyright"></i> <span id="js-current-year"></span> SaveFood. All rights reserved.
+          </div>
+
+        </div>
+      </div> <!-- / .row -->
+    </div> <!-- / .container -->
+  </footer>
+
+  <!-- JAVASCRIPT
+  ================================================== -->
+
+  <!-- JS Global -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="/static/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- JS Plugins -->
+  <script src="/static/assets/plugins/parallax/parallax.min.js"></script>
+  <script src="/static/assets/plugins/isotope/lib/imagesloaded.pkgd.min.js"></script>
+  <script src="/static/assets/plugins/isotope/isotope.pkgd.min.js"></script>
+  <script src="/static/assets/plugins/flickity/flickity.pkgd.min.js"></script>
+  <script src="/static/assets/plugins/lightbox/js/lightbox.min.js"></script>
+  <script src="/static/assets/plugins/reservation/reservation.js"></script>
+  <script src="/static/assets/plugins/alerts/alerts.js"></script>
+
+  <!-- JS Custom -->
+  <!-- build:js static/assets/js/theme.min.js -->
+  <script src="/static/assets/js/theme.js"></script>
+  <!-- endbuild -->
+  <script src="/static/assets/js/custom.js"></script>
+
+  </body>
+</html>

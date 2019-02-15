@@ -1,0 +1,41 @@
+
+
+{% extends "base.html" %}
+
+
+
+{%block content%}
+  <!-- HEADER
+	================================================== -->
+
+  <section class="section section_header" data-parallax="scroll" data-image-src="/static/assets/img/25.jpg">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+
+					<!-- Heading -->
+					<h1 class="section__heading section_header__heading text-center">
+						Παρακαλώ διαλέξτε μια μέθοδο εγγραφής
+					</h1>
+
+				</div>
+			</div> <!-- / .row -->
+		</div> <!-- / .container -->
+	</section>
+
+
+
+
+
+<div class="login-form">
+    <form action="/examples/actions/confirmation.php" method="post">
+        <h2 class="text-center">Επιλογές Εγγραφής</h2>
+        <div class="text-center social-btn">
+          <!--google auth is the authenitcation url from google  -->
+          <a href="{{google_auth}}" class="btn btn-danger btn-block"><i class="fa fa-google"></i> Εγγραφη με <b>Google</b></a>
+          <a href="#" class="btn btn-primary btn-block"><i class="fa fa-facebook"></i> Εγγραφη με <b>Facebook</b></a>
+          <a href="#" class="btn btn-info btn-block"><i class="fa fa-twitter"></i> Εγγραφη με  <b>Twitter</b></a>
+		     </div>
+	</div>
+
+{% endblock %}
