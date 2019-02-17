@@ -4,7 +4,7 @@
 
 
 {%block content%}
-	<!-- HEADER
+  <!-- HEADER
 	================================================== -->
 
   <section class="section section_header" data-parallax="scroll" data-image-src="/static/assets/img/25.jpg">
@@ -14,7 +14,7 @@
 
 					<!-- Heading -->
 					<h1 class="section__heading section_header__heading text-center">
-						<!-- Καλως ήρθες <br>{{username}}<br>Φόρμα Εισαγωγής Μενού -->
+						Φόρμα Εισαγωγής Μενού
 					</h1>
 
 				</div>
@@ -61,6 +61,8 @@
 
 
      <!-- H eisagwgh -->
+
+
      <h2 class="section__heading text-left">
        Εισάγετε ένα τίτλο για την εκδήλωση
      </h2>
@@ -71,49 +73,30 @@
        <div class="row">
          <div class="col">
            <input type="text" name = "submit_menu_event_desc" class="form-control"
-           placeholder="Περιγραφή Εκδήλωσης">
+           placeholder="{{event_desc}}">
          </div>
        </div>
      </form>
        <br><br>
 
+
      <h2 class="section__heading text-left">
        Εισάγετε τα Ορεκτικά
      </h2>
 
- <div class="form-group">
-   <div class="row">
-     <div class="col">
-  <label for="sel1">Μέγιστος αριθμός πιάτων που μπορούν να
-  επιλέξουν οι καλεσμένοι απο τα παρακάτω</label>
-  <select class="form-control" id="sel1">
-    <option>1</option>
-    <option>2</option>
-    <option>3</option>
-    <option>4</option>
-  </select>
-  </div>
-  <div class="col">
-    </div>
-</div>
-</div>
-
-
-
-
      <form id='submit_menu_form_starter'>
-       <div class="row">
-         <div class="col">
-           <input type="text" name = "dish_starter" class="form-control" placeholder="Όνομα Πιάτου">
-         </div>
-         <div class="col">
-           <input type="text" name="desc_starter" class="form-control" placeholder="Περιγραφή Πιάτου">
-         </div>
-
-
+       {% for item in starter  %}
+     <div class="row">
+       <div class="col">
+         <input type="text" name = "dish_starter" class="form-control" value="{{item['value']}}">
        </div>
+       <div class="col">
+         <input type="text" name = "desc_starter" class="form-control" value="{{starter_desc[loop.index0]['value']}}">
+       </div>
+     </div>
+     {% endfor %}
 
- </form>
+     </form>
 
 <br>
       <!-- Button -->
@@ -132,35 +115,19 @@
       <h2 class="section__heading text-left">
         Εισάγετε τα Κυρίως
       </h2>
-
-      <div class="form-group">
-        <div class="row">
-          <div class="col">
-       <label for="sel1">Μέγιστος αριθμός πιάτων που μπορούν να
-       επιλέξουν οι καλεσμένοι απο τα παρακάτω</label>
-       <select class="form-control" id="sel1">
-         <option>1</option>
-         <option>2</option>
-         <option>3</option>
-         <option>4</option>
-       </select>
-       </div>
-       <div class="col">
-         </div>
-     </div>
-     </div>
-
-
      <form id='submit_menu_form_main'>
+         {% for item in main  %}
        <div class="row">
          <div class="col">
-           <input type="text" name = "dish_main" class="form-control" placeholder="Όνομα Πιάτου">
+           <input type="text" name = "dish_main" class="form-control" value="{{item['value']}}">
          </div>
          <div class="col">
-           <input type="text" name = "desc_main" class="form-control" placeholder="Περιγραφή Πιάτου">
+           <input type="text" name = "desc_main" class="form-control" value="{{main_desc[loop.index0]['value']}}">
          </div>
        </div>
+       {% endfor %}
 </form>
+
 <br>
      <!-- Button -->
     <div class="text-center">
@@ -184,34 +151,17 @@
        Εισάγετε τα Επιδόρπια
      </h2>
 
-
-     <div class="form-group">
-       <div class="row">
-         <div class="col">
-      <label for="sel1">Μέγιστος αριθμός πιάτων που μπορούν να
-      επιλέξουν οι καλεσμένοι απο τα παρακάτω</label>
-      <select class="form-control" id="sel1">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-      </select>
-      </div>
-      <div class="col">
-        </div>
-    </div>
-    </div>
-
-
      <form id='submit_menu_form_desserts'>
-       <div class="row">
-         <div class="col">
-           <input type="text" name = "dish_desserts" class="form-control" placeholder="Όνομα Πιάτου">
-         </div>
-         <div class="col">
-           <input type="text" name="desc_desserts" class="form-control" placeholder="Περιγραφή Πιάτου">
-         </div>
+       {% for item in desserts  %}
+     <div class="row">
+       <div class="col">
+         <input type="text" name = "dish_desserts" class="form-control" value="{{item['value']}}">
        </div>
+       <div class="col">
+         <input type="text" name = "desc_desserts" class="form-control" value="{{desserts_desc[loop.index0]['value']}}">
+       </div>
+     </div>
+     {% endfor %}
 
      </form>
 
@@ -232,37 +182,17 @@
       <h2 class="section__heading text-left">
         Εισάγετε τα Ποτά
       </h2>
-
-
-      <div class="form-group">
-        <div class="row">
-          <div class="col">
-       <label for="sel1">Μέγιστος αριθμός ποτών που μπορούν να
-       επιλέξουν οι καλεσμένοι απο τα παρακάτω</label>
-       <select class="form-control" id="sel1">
-         <option>1</option>
-         <option>2</option>
-         <option>3</option>
-         <option>4</option>
-       </select>
+     <form id='submit_menu_form_drinks'>
+       {% for item in drinks  %}
+     <div class="row">
+       <div class="col">
+         <input type="text" name = "drinks" class="form-control" value="{{item['value']}}">
        </div>
        <div class="col">
-         </div>
-         <div class="col">
-           </div>
-     </div>
-     </div>
-
-
-     <form id='submit_menu_form_drinks'>
-       <div class="row">
-         <div class="col">
-           <input type="text" name = "drinks" class="form-control" placeholder="Όνομα Πιάτου">
-         </div>
-         <div class="col">
-           <input type="text" name = "desc_drinks" class="form-control" placeholder="Περιγραφή Πιάτου">
-         </div>
+         <input type="text" name = "desc_drinks" class="form-control" value="{{drinks_desc[loop.index0]['value']}}">
        </div>
+     </div>
+     {% endfor %}
 
      </form>
 
@@ -284,4 +214,5 @@
       Υποβολή
       </a>
     </div>
-{%endblock%}
+
+{% endblock%}

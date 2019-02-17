@@ -4,6 +4,7 @@ import json
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 
+
 import random
 import os
 from werkzeug.utils import secure_filename
@@ -12,12 +13,12 @@ from flask_login import LoginManager, login_required, login_user, \
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
 import datetime
-from .models import User,MenuAvailable
+from .models import User,Menu,MenuVote
 
 #######################################################
 ############### Main Page ##########################
 #######################################################
-@app.route('/mainpage')
+@app.route('/')
 def mainpage():
     return render_template('mainpage.html')
 
@@ -25,14 +26,19 @@ def mainpage():
 #################################################
 ########## Menu Submition ######################
 #################################################
-@app.route('/submit_menu/<username>')
+#@app.route('/submit_menu/<username>')
 @app.route('/submit_menu/')
 @login_required
 def submit_menu(username=None):
-    print("###########################")
-    print(current_user)
-    print("###########################")
-    return render_template('submit_menu.html',username=username)
+    return render_template('submit_menu.html',username=current_user.username)
+    #return render_template('submit_menu.html')
+
+@app.route('/test_form/')
+#@login_required
+def test_form():
+
+    return render_template('test_form.html')
+
 
 
 
@@ -49,6 +55,7 @@ def receiver2():
         session['desc_desserts'] = json.loads(request.form['desc_desserts'])
         session['drinks'] = json.loads(request.form['drinks'])
         session['desc_drinks'] = json.loads(request.form['desc_drinks'])
+        session['event_desc'] = json.loads(request.form['event_desc'])[0]['value']
 
         return jsonify(dict(redirect=url_for('submit_menu_confirmation')))
 
@@ -57,25 +64,30 @@ def receiver2():
 def submit_menu_confirmation():
     print('hello from confirmation')
 
-    return render_template('sbmt_menu_cnfrm_page.html',starter = session.get('dish_starter',None),
-                                                        starter_desc = session.get('desc_starter',None),
-                                                        main=session.get('dish_main',None),main_desc = session['desc_main'],
-                                       desserts=session['dish_desserts'],desserts_desc = session['desc_desserts'],
-                                       drinks=session['drinks'],drinks_desc=session['desc_drinks'])
+    return render_template('sbmt_menu_cnfrm_page.html',
+    event_desc=session.get('event_desc',None),
+    starter = session.get('dish_starter',None),
+    starter_desc = session.get('desc_starter',None),
+    main=session.get('dish_main',None),main_desc = session['desc_main'],
+    desserts=session['dish_desserts'],desserts_desc = session['desc_desserts'],
+    drinks=session['drinks'],drinks_desc=session['desc_drinks'])
 
 
 @app.route('/change_input')
 def change_input():
-    return render_template('change_menu_input.html',starter = session.get('dish_starter',None),
-                                                        starter_desc = session.get('desc_starter',None),
-                                                        main=session.get('dish_main',None),main_desc = session['desc_main'],
-                                       desserts=session['dish_desserts'],desserts_desc = session['desc_desserts'],
-                                       drinks=session['drinks'],drinks_desc=session['desc_drinks'])
+    return render_template('change_menu_input.html',
+    event_desc=session.get('event_desc',None),
+    starter = session.get('dish_starter',None),
+    starter_desc = session.get('desc_starter',None),
+    main=session.get('dish_main',None),main_desc = session['desc_main'],
+    desserts=session['dish_desserts'],desserts_desc = session['desc_desserts'],
+    drinks=session['drinks'],drinks_desc=session['desc_drinks'])
 
 
 @app.route('/display_event_code')
 def display_event_code():
     event_code = random.randint(100000,1000000)
+    event_desc = session['event_desc']
     dish_starter = session['dish_starter']
     desc_starter = session['desc_starter']
     dish_main = session['dish_main']
@@ -84,35 +96,59 @@ def display_event_code():
     desc_desserts = session['desc_desserts']
     drinks = session['drinks']
     desc_drinks = session['desc_drinks']
-
+    u = current_user
+    menu = Menu()
     g=0
     for dish in dish_starter:
-        new_entry = MenuAvailable(event_code,'starter', dish['value'],desc_starter[g]['value'],'')
+        new_entry = Menu(event_code=event_code,
+                            event_desc=event_desc,
+                              submenu='starter',
+                              dish=dish['value'],
+                              dish_desc=desc_starter[g]['value'],
+                              created_ts=datetime.datetime.utcnow(),
+                              author=u)
         db.session.add(new_entry)
-        db.session.commit()
+            #db.session.commit()
         g+=1
     g=0
     for dish in dish_main:
-        new_entry = MenuAvailable(event_code,'main', dish['value'],desc_main[g]['value'],'')
-        db.session.add(new_entry)
-        db.session.commit()
+        new_entry = Menu(event_code=event_code,
+        event_desc=event_desc,
+                          submenu='main',
+                          dish=dish['value'],
+                          dish_desc=desc_starter[g]['value'],
+                          created_ts=datetime.datetime.utcnow(),
+                          author=u)
+        db.session.add(new_entry)        #db.session.commit()
         g+=1
     g=0
     for dish in dish_desserts:
-        new_entry = MenuAvailable(event_code,'desserts', dish['value'],desc_desserts[g]['value'],'')
-        db.session.add(new_entry)
-        db.session.commit()
+        new_entry = Menu(event_code=event_code,
+        event_desc=event_desc,
+                          submenu='desserts',
+                          dish=dish['value'],
+                          dish_desc=desc_starter[g]['value'],
+                          created_ts=datetime.datetime.utcnow(),
+                          author=u)
+        db.session.add(new_entry)        #db.session.commit()
         g+=1
     g=0
     for dish in drinks:
-        new_entry = MenuAvailable(event_code,'drinks', dish['value'],desc_drinks[g]['value'],'')
+        new_entry = Menu(event_code=event_code,
+        event_desc=event_desc,
+                          submenu='drinks',
+                          dish=dish['value'],
+                          dish_desc=desc_starter[g]['value'],
+                      created_ts=datetime.datetime.utcnow(),
+                          author=u)
+        #db.session.commit()
         db.session.add(new_entry)
-        db.session.commit()
         g+=1
+    db.session.commit()
 
 
-
-    return render_template('display_event_code.html',event_code=event_code)
+    return render_template('display_event_code.html',event_code=event_code,
+    event_desc=event_desc)
 
 
 
@@ -132,45 +168,41 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 login_manager.session_protection = "strong"
 app.secret_key = os.urandom(24)
-class Auth:
-    CLIENT_ID = ('1009864485884-bo8l1jhl6mk8v21ltlp6qqnj4q7p9kcj.apps.googleusercontent.com')
-    CLIENT_SECRET = 'tXyY4pZktAuVxflrZSltgFDv'
-    REDIRECT_URI = 'https://localhost:5000/google_login'
-    REQUEST_AUTHORIZATION = 'https://accounts.google.com/o/oauth2/auth'
-    TOKEN_URI = 'https://accounts.google.com/o/oauth2/token'
-    USER_INFO = 'https://www.googleapis.com/oauth2/v1/userinfo'
-    SCOPE = ['https://www.googleapis.com/auth/userinfo.email',
-                'https://www.googleapis.com/auth/userinfo.profile']
+
 
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
 ############### Google #################
 def get_google_auth(state=None, token=None):
+    # If this function has token returns an OAuth2session
+    # with token, is state with state
+    #if it has nothing it creates a new OAuth2session object
+    # with the CLIENT_ID,redirect_uri and scope
     if token:
-        return OAuth2Session(Auth.CLIENT_ID, token=token)
+        return OAuth2Session(app.config['CLIENT_ID_G'], token=token)
     if state:
         return OAuth2Session(
-            Auth.CLIENT_ID,
+            app.config['CLIENT_ID_G'],
             state=state,
-            redirect_uri=Auth.REDIRECT_URI)
+            redirect_uri=app.config['REDIRECT_URI_G'])
     oauth = OAuth2Session(
-        Auth.CLIENT_ID,
-        redirect_uri=Auth.REDIRECT_URI,
-        scope=Auth.SCOPE)
+        app.config['CLIENT_ID_G'],
+        redirect_uri=app.config['REDIRECT_URI_G'],
+        scope=app.config['SCOPE_G'])
     return oauth
 
 
 
 @app.route('/login')
 def login():
-    # if current_user.is_authenticated:
-    #     print("user is authenticated")
-    #     return redirect(url_for('index'))
+    if current_user.is_authenticated:
+        print("user is authenticated")
+        return redirect(url_for('mainpage'))
     print("========= Hello From Login ==========")
     google = get_google_auth()
     auth_url, state = google.authorization_url(
-        Auth.REQUEST_AUTHORIZATION,
+        app.config['REQUEST_AUTHORIZATION_G'],
         access_type='offline',
         prompt='select_account')
     #redirect()
@@ -186,29 +218,20 @@ def login():
 @app.route('/google_login')
 def google_login():
     # Redirect user to home page if already logged in.
-    print(current_user)
-    print("---------------------------------------")
-    print("Hello formo google redirect uri - submit_menu")
-    print("---------------------------------------")
-    print(request.args)
-    print("---------------------------------------")
-    print("---------------------------------------")
+    if current_user.is_authenticated:
+        print('is authnticated')
+
     if current_user is not None and current_user.is_authenticated:
         return redirect(url_for('index'))
     if 'error' in request.args:
         if request.args.get('error') == 'access_denied':
             return 'You denied access.'
         return 'Error encountered.'
-    # if 'code' not in request.args and 'state' not in request.args:
-    #     return redirect(url_for('login'))
+
 
     else:
         # Execution reaches here when user has
         # successfully authenticated our app.
-        print("---------------------------------------")
-        print("Hello from getting token")
-        print("---------------------------------------")
-
         try:
             google = get_google_auth(state=session['oauth_state'])
         except KeyError:
@@ -216,15 +239,15 @@ def google_login():
 
         try:
             token = google.fetch_token(
-                Auth.TOKEN_URI,
-                client_secret=Auth.CLIENT_SECRET,
+                app.config['TOKEN_URI_G'],
+                client_secret=app.config['CLIENT_SECRET_G'],
                 # Here is where he gets the response
                 authorization_response=request.url)
 
         except HTTPError:
             return 'HTTPError occurred.'
         google = get_google_auth(token=token)
-        resp = google.get(Auth.USER_INFO)
+        resp = google.get(app.config['USER_INFO_G'])
         if resp.status_code == 200:
             user_data = resp.json()
             email = user_data['email']
@@ -232,24 +255,22 @@ def google_login():
             if user is None:
                 user = User()
                 user.email = email
-            user.name = user_data['name']
-            print(token)
-            print(user.name)
-            print(user.email)
-            user.tokens = json.dumps(token)
-            user.avatar = user_data['picture']
-            db.session.add(user)
-            db.session.commit()
+                user.username = user_data['name']
+                user.created_ts=datetime.datetime.utcnow()
+                db.session.add(user)
+                db.session.commit()
             login_user(user)
             print(current_user)
-            return redirect(url_for('submit_menu',username=user.name))
+            return redirect(url_for('submit_menu'))
         return 'Could not fetch your information.'
 
 
 
-
-
-
+def clean_text(str_):
+    if str=='':
+        return None
+    else:
+        return str_.replace("'","").replace("(","").replace(")","").replace(",","")
 
 
 
@@ -265,20 +286,87 @@ def menu():
     else:
         voter = session['voter_vote']
         code = session['event_code']
-    starter = [clean_text(str(item)) for item in db.session.query(MenuAvailable.dish).filter(and_(MenuAvailable.event_code == code,MenuAvailable.submenu=='starter')).all()]
-    starter_desc = [clean_text(str(item)) for item in db.session.query(MenuAvailable.dish_desc).filter(and_(MenuAvailable.event_code == code,MenuAvailable.submenu=='starter')).all()]
 
-    main = [clean_text(str(item)) for item in db.session.query(MenuAvailable.dish).filter(and_(MenuAvailable.event_code == code,MenuAvailable.submenu=='main')).all()]
-    main_desc = [clean_text(str(item)) for item in db.session.query(MenuAvailable.dish_desc).filter(and_(MenuAvailable.event_code == code,MenuAvailable.submenu=='main')).all()]
 
-    desserts = [clean_text(str(item)) for item in db.session.query(MenuAvailable.dish).filter(and_(MenuAvailable.event_code == code,MenuAvailable.submenu=='desserts')).all()]
-    desserts_desc = [clean_text(str(item)) for item in db.session.query(MenuAvailable.dish_desc).filter(and_(MenuAvailable.event_code == code,MenuAvailable.submenu=='desserts')).all()]
+    event_desc = clean_text(
+    str(db.session.query(Menu.event_desc).filter(Menu.event_code == code).first()))
 
-    drinks = [clean_text(str(item)) for item in db.session.query(MenuAvailable.dish).filter(and_(MenuAvailable.event_code == code,MenuAvailable.submenu=='drinks')).all()]
-    drinks_desc = [clean_text(str(item)) for item in db.session.query(MenuAvailable.dish_desc).filter(and_(MenuAvailable.event_code == code,MenuAvailable.submenu=='drinks')).all()]
+    starter = [clean_text(str(item)) for item in db.session.query(Menu.dish).filter(and_(Menu.event_code == code,Menu.submenu=='starter')).all()]
+    starter_desc = [clean_text(str(item)) for item in db.session.query(Menu.dish_desc).filter(and_(Menu.event_code == code,Menu.submenu=='starter')).all()]
+
+    main = [clean_text(str(item)) for item in db.session.query(Menu.dish).filter(and_(Menu.event_code == code,Menu.submenu=='main')).all()]
+    main_desc = [clean_text(str(item)) for item in db.session.query(Menu.dish_desc).filter(and_(Menu.event_code == code,Menu.submenu=='main')).all()]
+
+    desserts = [clean_text(str(item)) for item in db.session.query(Menu.dish).filter(and_(Menu.event_code == code,Menu.submenu=='desserts')).all()]
+    desserts_desc = [clean_text(str(item)) for item in db.session.query(Menu.dish_desc).filter(and_(Menu.event_code == code,Menu.submenu=='desserts')).all()]
+
+    drinks = [clean_text(str(item)) for item in db.session.query(Menu.dish).filter(and_(Menu.event_code == code,Menu.submenu=='drinks')).all()]
+    drinks_desc = [clean_text(str(item)) for item in db.session.query(Menu.dish_desc).filter(and_(Menu.event_code == code,Menu.submenu=='drinks')).all()]
 
 
     return render_template('menu.html',starter = starter,starter_desc = starter_desc,
                                        main=main,main_desc = main_desc,
                                        desserts=desserts,desserts_desc = desserts_desc,
-                                       drinks=drinks,drinks_desc=drinks_desc)
+                                       drinks=drinks,drinks_desc=drinks_desc,
+                                       event_desc=event_desc)
+
+@app.route('/post_menu_voted',methods=['POST','GET'])
+def post_menu_voted():
+    if request.method=='POST':
+        print("hello from post_menu_voted")
+        session['starters_vote'] = json.loads(request.form['starters'])
+        session['main_vote'] = json.loads(request.form['main'])
+        session['desserts_vote'] = json.loads(request.form['desserts'])
+        session['drinks_vote'] = json.loads(request.form['drinks'])
+        return jsonify(dict(redirect=url_for('menu_voted_conf')))
+
+
+@app.route('/menu_voted_conf')
+def menu_voted_conf():
+    return render_template('menu_voted_conf.html')
+
+@app.route('/menu_voted_submitted')
+def menu_voted_submitted():
+    starters = session['starters_vote']
+    main = session['main_vote']
+    desserts = session['desserts_vote']
+    drinks = session['drinks_vote']
+    voter = session['voter_vote']
+    event_code = session['event_code']
+    for item in starters:
+        new_entry = MenuVote(event_code=event_code,
+                          voter=voter,
+                          submenu='starters',
+                          item=item.strip(),
+                          created_ts=datetime.datetime.utcnow())
+
+        db.session.add(new_entry)
+
+
+    for item in main:
+        new_entry = MenuVote(event_code=event_code,
+                          voter=voter,
+                          submenu='main',
+                          item=item.strip(),
+                          created_ts=datetime.datetime.utcnow())
+
+        db.session.add(new_entry)
+    for item in desserts:
+        new_entry = MenuVote(event_code=event_code,
+                          voter=voter,
+                          submenu='desserts',
+                          item=item.strip(),
+                          created_ts=datetime.datetime.utcnow())
+
+        db.session.add(new_entry)
+    for item in drinks:
+        new_entry = MenuVote(event_code=event_code,
+                          voter=voter,
+                          submenu='drinks',
+                          item=item.strip(),
+                          created_ts=datetime.datetime.utcnow())
+
+        db.session.add(new_entry)
+        db.session.commit()
+
+    return render_template('menu_voted_thanks.html')

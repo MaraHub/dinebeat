@@ -167,7 +167,7 @@ $("#submit_menu_confirmation_b").click(function(){
 	               var desc_desserts = $('[name="desc_desserts"]').serializeArray();
                  var drinks = $('[name="drinks"]').serializeArray();
                   var desc_drinks = $('[name="desc_drinks"]').serializeArray();
-
+                  var event_desc = $('[name="submit_menu_event_desc"]').serializeArray();
                 console.log(dish_starter.length);
 
 
@@ -176,7 +176,9 @@ $("#submit_menu_confirmation_b").click(function(){
                   url: '/receiver2',
                   type: 'POST',
                   dataType: 'json',
-                  data:{ 'dish_starter': JSON.stringify(dish_starter),
+                  data:{
+                  'event_desc':  JSON.stringify(event_desc),
+                  'dish_starter': JSON.stringify(dish_starter),
                   'desc_starter': JSON.stringify(desc_starter),
                   'dish_main': JSON.stringify(dish_main),
                   'desc_main': JSON.stringify(desc_main),

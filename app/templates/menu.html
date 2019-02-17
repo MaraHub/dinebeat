@@ -1,0 +1,221 @@
+{% extends "base_2.html"%}
+{% block content%}
+	<!-- HEADER
+	================================================== -->
+
+  <section class="section section_header" data-parallax="scroll" data-image-src="/static/assets/img/25.jpg">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+
+					<!-- Heading -->
+					<h1 class="section__heading section_header__heading text-center">
+						Menu Για τη Βραδιά {{event_desc}}
+					</h1>
+
+				</div>
+			</div> <!-- / .row -->
+		</div> <!-- / .container -->
+	</section>
+
+	<!-- MENU
+	================================================== -->
+	<section class="section section_menu section_border_bottom">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+
+					<!-- Heading -->
+					<h2 class="section__heading text-center">
+						Επιλέξτε το αγαπημένο σας πιάτο
+					</h2>
+					<p class="section__subheading text-center">
+						Επιλέξτε για κάθε διαφορετική κατηγορία,
+            το πιάτο που θα θέλατε να απολαύσετε στην εκδήλωση
+					</p>
+
+				</div>
+			</div> <!-- / .row -->
+
+
+			<div class="row">
+				<div class="col">
+
+					<!-- Navigation -->
+					<nav class="section_menu__nav">
+						<ul>
+              <li class="active">
+								<a href="#menu_images" data-filter=".salads">Σαλάτες</a>
+							</li>
+
+							<li class="active">
+								<a href="#menu_images" data-filter=".starters">Ορεκτικα</a>
+							</li>
+							<li>
+								<a href="#menu_images" data-filter=".mains">Κυριως</a>
+							</li>
+							<li>
+								<a href="#menu_images" data-filter=".dinner">Επιδορπιο</a>
+							</li>
+							<li>
+								<a href="#menu_images" data-filter=".drinks">ποτα</a>
+							</li>
+						</ul>
+					</nav>
+
+				</div>
+			</div>
+
+
+<!--  To Section me ta Entree einai EDW Arxh-->
+			<div class="row section_menu__grid" id="menu_images">
+
+        {% for fagito in starter  %}
+        <div class="col-md-6 section_menu__grid__item starters">
+          <div class="section_menu__item">
+            <div class="row" id="marios">
+              <div class="col-3 align-self-center">
+                <div class="section_menu__item__img">
+                  <img src="/static/assets/img/002-start-1.png" alt="...">
+                </div>
+              </div>
+              <div class="col-7">
+                <h4 class="entree">
+                {{fagito}}
+                </h4>
+                <p>
+{{starter_desc[loop.index0]}}
+               </p>
+              </div>
+              <!-- <div class="col-2">
+                <div class="section_menu__item__price text-center">
+                  $15
+                </div>
+              </div> -->
+            </div> <!-- / .row -->
+          </div>
+        </div>
+
+        {% endfor %}
+
+</div>
+
+<!--  To Section me ta Entree einai EDW Telos-->
+
+<!--  To Section me ta Kyriws einai EDW Arxh-->
+<div class="row section_menu__grid" id="menu_images">
+  {% for fagito in main %}
+  <div class="col-md-6 section_menu__grid__item lunch">
+    <div class="section_menu__item">
+      <div class="row" id="marios">
+        <div class="col-3 align-self-center">
+          <div class="section_menu__item__img">
+            <img src="/static/assets/img/004-food.png" alt="...">
+          </div>
+        </div>
+        <div class="col-7">
+          <h4 class="kyriws">
+          {{fagito}}
+          </h4>
+          <p>
+           {{main_desc[loop.index0]}}
+         </p>
+        </div>
+        <!-- <div class="col-2">
+          <div class="section_menu__item__price text-center">
+            $15
+          </div>
+        </div> -->
+      </div> <!-- / .row -->
+    </div>
+  </div>
+
+  {% endfor %}
+
+</div>
+
+<!--  To Section me ta Kyriws einai EDW Telos-->
+
+
+
+<!--  To Section me ta Desserts einai EDW Arxh-->
+<div class="row section_menu__grid" id="menu_images">
+  {% for fagito in desserts %}
+  <div class="col-md-6 section_menu__grid__item dinner">
+    <div class="section_menu__item">
+      <div class="row" id="marios">
+        <div class="col-3 align-self-center">
+          <div class="section_menu__item__img">
+            <img src="/static/assets/img/005-cake.png" alt="...">
+          </div>
+        </div>
+        <div class="col-7">
+          <h4 class="desserts">
+          {{fagito}}
+          </h4>
+          <p>
+	{{desserts_desc[loop.index0]}}
+            </p>
+        </div>
+        <!-- <div class="col-2">
+          <div class="section_menu__item__price text-center">
+            $15
+          </div>
+        </div> -->
+      </div> <!-- / .row -->
+    </div>
+  </div>
+
+  {% endfor %}
+
+</div>
+
+<!--  To Section me ta Desserts einai EDW Telos-->
+
+<!--  To Section me ta Drinks einai EDW Arxh-->
+<div class="row section_menu__grid" id="menu_images">
+  {% for fagito in drinks %}
+  <div class="col-md-6 section_menu__grid__item drinks">
+    <div class="section_menu__item">
+      <div class="row" id="marios">
+        <div class="col-3 align-self-center">
+          <div class="section_menu__item__img">
+            <img src="/static/assets/img/006-drink.png" alt="...">
+          </div>
+        </div>
+        <div class="col-7">
+          <h4 class="drinks">
+          {{fagito}}
+          </h4>
+          <p>
+           {{drinks_desc[loop.index0]}}
+         </p>
+        </div>
+        <!-- <div class="col-2">
+          <div class="section_menu__item__price text-center">
+            $15
+          </div>
+        </div> -->
+      </div> <!-- / .row -->
+    </div>
+  </div>
+
+  {% endfor %}
+
+</div>
+
+<!--  To Section me ta Desserts einai EDW Telos-->
+
+
+
+<br>
+<!-- Button -->
+<div class="text-center">
+  <a   class="btn btn-primary text-black" id="submit_menu_guest">
+  Υποβολή
+  </a>
+</div>
+		</div> <!-- / .container -->
+	</section>
+
+{% endblock %}

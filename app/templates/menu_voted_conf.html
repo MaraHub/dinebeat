@@ -1,9 +1,6 @@
+{%extends "base_2.html"%}
 
-{% extends "base_2.html" %}
-
-
-
-{%block content%}
+{% block content%}
 
 	<!-- HEADER
 	================================================== -->
@@ -46,23 +43,13 @@
 				</div>
 			</div> <!-- / .row -->
 
-
-      <div class="text-center">
-      <h3>  Τιτλος Εκδηλώσης</h3>
-        </div>
-        <div class="text-left">
-          <h4>{{event_desc}}</h4>
-
-      </div>
-
-
 <div class="text-center">
 <h3> Ορεκτικά</h3>
   </div>
-  {% for item in starter  %}
+  {% for item in session['starters_vote']  %}
   <div class="text-left">
-    <h4>{{item['value']}}</h4>
-    <p> {{starter_desc[loop.index0]['value']}}   </p>
+    <h4>{{item}}</h4>
+
 </div>
 
         {% endfor %}
@@ -72,10 +59,10 @@
         <div class="text-center">
         <h3> Κυρίως</h3>
           </div>
-          {% for item in main  %}
+          {% for item in session['main_vote']  %}
           <div class="text-left">
-            <h4>{{item['value']}}</h4>
-            <p> {{main_desc[loop.index0]['value']}}   </p>
+            <h4>{{item}}</h4>
+
         </div>
 
                 {% endfor %}
@@ -84,10 +71,10 @@
                 <div class="text-center">
                 <h3> Επιδόρπια</h3>
                   </div>
-                  {% for item in desserts  %}
+                  {% for item in session['desserts_vote']  %}
                   <div class="text-left">
-                    <h4>{{item['value']}}</h4>
-                    <p> {{desserts_desc[loop.index0]['value']}}   </p>
+                    <h4>{{item}}</h4>
+
                 </div>
 
                         {% endfor %}
@@ -95,10 +82,10 @@
                         <div class="text-center">
                         <h3>  Ποτά</h3>
                           </div>
-                          {% for item in drinks  %}
+                          {% for item in session['drinks_vote']  %}
                           <div class="text-left">
-                            <h4>{{item['value']}}</h4>
-                            <p> {{drinks_desc[loop.index0]['value']}}   </p>
+                            <h4>{{item}}</h4>
+
                         </div>
 
                                 {% endfor %}
@@ -106,13 +93,13 @@
 <br>
 <!-- Button -->
 <div class="text-center">
-  <a   class="btn btn-primary text-black" id="submit_menu_confirmation" href="{{url_for('change_input')}}" >
+  <a   class="btn btn-primary text-black" href="{{url_for('menu')}}" >
   Επιστροφη
   </a>
 </div>
 <br><br>
 <div class="text-center">
-  <a   class="btn btn-primary text-black" id="submit_menu_confirmation" href={{url_for('display_event_code')}}>
+  <a   class="btn btn-primary text-black" id="submit_menu_confirmation" href={{url_for('menu_voted_submitted')}}>
   Επιβεβαιωση
   </a>
 </div>
@@ -120,5 +107,4 @@
 		</div> <!-- / .container -->
 	</section>
 
-
-{% endblock %}
+{%endblock%}
