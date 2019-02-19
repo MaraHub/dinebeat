@@ -20,7 +20,7 @@ from .models import User,Menu,MenuVote
 #######################################################
 @app.route('/')
 def mainpage():
-    return render_template('mainpage.html')
+    return render_template('mainpage_2.html')
 
 
 #################################################
