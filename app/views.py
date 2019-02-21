@@ -116,7 +116,7 @@ def display_event_code():
         event_desc=event_desc,
                           submenu='main',
                           dish=dish['value'],
-                          dish_desc=dish_main[g]['value'],
+                          dish_desc=desc_main[g]['value'],
                           created_ts=datetime.datetime.utcnow(),
                           author=u)
         db.session.add(new_entry)        #db.session.commit()
@@ -127,7 +127,7 @@ def display_event_code():
         event_desc=event_desc,
                           submenu='desserts',
                           dish=dish['value'],
-                          dish_desc=dish_desserts[g]['value'],
+                          dish_desc=desc_desserts[g]['value'],
                           created_ts=datetime.datetime.utcnow(),
                           author=u)
         db.session.add(new_entry)        #db.session.commit()
@@ -138,7 +138,7 @@ def display_event_code():
         event_desc=event_desc,
                           submenu='drinks',
                           dish=dish['value'],
-                          dish_desc=drinks[g]['value'],
+                          dish_desc=desc_drinks[g]['value'],
                       created_ts=datetime.datetime.utcnow(),
                           author=u)
         #db.session.commit()
