@@ -109,7 +109,7 @@ $("#submit_menu_confirmation_b").click(function(){
                var numselections = $('.section_menu__item_selected .entree').length;
                var selections = $(".section_menu__item_selected .desserts").toArray();
                 var entree = $(".section_menu__item_selected .entree").toArray();
-                var kyriws = $(".section_menu__item_selected .kyriws").toArray();
+                var kyriws = $(".section_menu__item_selected .mains").toArray();
                 var desserts = $(".section_menu__item_selected .desserts").toArray();
                 var drinks = $(".section_menu__item_selected .drinks").toArray();
 

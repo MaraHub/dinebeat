@@ -296,7 +296,10 @@ def menu():
 
     main = [clean_text(str(item)) for item in db.session.query(Menu.dish).filter(and_(Menu.event_code == code,Menu.submenu=='main')).all()]
     main_desc = [clean_text(str(item)) for item in db.session.query(Menu.dish_desc).filter(and_(Menu.event_code == code,Menu.submenu=='main')).all()]
-
+    print("main----------")
+    print(main)
+    print("main desc-------")
+    print(main_desc)
     desserts = [clean_text(str(item)) for item in db.session.query(Menu.dish).filter(and_(Menu.event_code == code,Menu.submenu=='desserts')).all()]
     desserts_desc = [clean_text(str(item)) for item in db.session.query(Menu.dish_desc).filter(and_(Menu.event_code == code,Menu.submenu=='desserts')).all()]
 
