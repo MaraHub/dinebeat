@@ -56,6 +56,18 @@ $("#submit_menu_confirmation_b").click(function(){
         $(this).toggleClass('section_menu__item section_menu__item_selected')
       });
 
+
+      $( ".section_menu__item" ).click(function() {
+        var numselections = $('.section_menu__item_selected').length;
+        console.log("Items selected");
+        console.log(numselections)
+        msg="ssdcsc"
+        if (numselections>2) {
+          $(document).trigger('touche.alert.show', ['danger', msg]);
+          window.alert("Παρακαλώ επιλέξτε μεχρι 2");
+        }
+      });
+
       // $( "h4" ).each(function( index ) {
       //   console.log( index + ": " + $( this ).text() );
       // });
@@ -109,7 +121,7 @@ $("#submit_menu_confirmation_b").click(function(){
                var numselections = $('.section_menu__item_selected .entree').length;
                var selections = $(".section_menu__item_selected .desserts").toArray();
                 var entree = $(".section_menu__item_selected .entree").toArray();
-                var kyriws = $(".section_menu__item_selected .mains").toArray();
+                var kyriws = $(".section_menu__item_selected .kyriws").toArray();
                 var desserts = $(".section_menu__item_selected .desserts").toArray();
                 var drinks = $(".section_menu__item_selected .drinks").toArray();
 

@@ -3,8 +3,9 @@ from app import app,db
 import json
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
-
-
+#import pandas as pd
+from collections import defaultdict
+from sqlalchemy.inspection import inspect
 import random
 import os
 from werkzeug.utils import secure_filename
@@ -14,7 +15,9 @@ from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
 import datetime
 from .models import User,Menu,MenuVote
-
+import pandas as pd
+from sqlalchemy import create_engine
+from collections import OrderedDict
 #######################################################
 ############### Main Page ##########################
 #######################################################
@@ -22,6 +25,9 @@ from .models import User,Menu,MenuVote
 def mainpage():
     return render_template('mainpage_2.html')
 
+@app.route('/')
+def epikoinwnia():
+    return render_template('epikoinwnia.html')
 
 #################################################
 ########## Menu Submition ######################
@@ -86,6 +92,7 @@ def change_input():
 
 @app.route('/display_event_code')
 def display_event_code():
+    #while User.query.filter_by(email=email).first()
     event_code = random.randint(100000,1000000)
     event_desc = session['event_desc']
     dish_starter = session['dish_starter']
@@ -100,49 +107,54 @@ def display_event_code():
     menu = Menu()
     g=0
     for dish in dish_starter:
-        new_entry = Menu(event_code=event_code,
+        if dish['value'] :
+
+            new_entry = Menu(event_code=event_code,
                             event_desc=event_desc,
                               submenu='starter',
                               dish=dish['value'],
                               dish_desc=desc_starter[g]['value'],
                               created_ts=datetime.datetime.utcnow(),
                               author=u)
-        db.session.add(new_entry)
+            db.session.add(new_entry)
             #db.session.commit()
         g+=1
     g=0
     for dish in dish_main:
-        new_entry = Menu(event_code=event_code,
-        event_desc=event_desc,
+        if  dish['value']:
+            new_entry = Menu(event_code=event_code,
+            event_desc=event_desc,
                           submenu='main',
                           dish=dish['value'],
                           dish_desc=desc_main[g]['value'],
                           created_ts=datetime.datetime.utcnow(),
                           author=u)
-        db.session.add(new_entry)        #db.session.commit()
+            db.session.add(new_entry)        #db.session.commit()
         g+=1
     g=0
     for dish in dish_desserts:
-        new_entry = Menu(event_code=event_code,
-        event_desc=event_desc,
+        if  dish['value']:
+            new_entry = Menu(event_code=event_code,
+            event_desc=event_desc,
                           submenu='desserts',
                           dish=dish['value'],
                           dish_desc=desc_desserts[g]['value'],
                           created_ts=datetime.datetime.utcnow(),
                           author=u)
-        db.session.add(new_entry)        #db.session.commit()
+            db.session.add(new_entry)        #db.session.commit()
         g+=1
     g=0
     for dish in drinks:
-        new_entry = Menu(event_code=event_code,
-        event_desc=event_desc,
+        if  dish['value']:
+            new_entry = Menu(event_code=event_code,
+            event_desc=event_desc,
                           submenu='drinks',
                           dish=dish['value'],
                           dish_desc=desc_drinks[g]['value'],
                       created_ts=datetime.datetime.utcnow(),
                           author=u)
         #db.session.commit()
-        db.session.add(new_entry)
+            db.session.add(new_entry)
         g+=1
     db.session.commit()
 
@@ -272,7 +284,31 @@ def clean_text(str_):
     else:
         return str_.replace("'","").replace("(","").replace(")","").replace(",","")
 
+def get_menu(event_code):
 
+    conn = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], echo=False)
+    df = pd.read_sql("select * from menu where event_code=%s and dish <>'';" %event_code,conn)
+    data = dict()
+    for submenu in df['submenu'].unique():
+        for index,dish in df[df.submenu==submenu].reset_index().iterrows():
+            if index==0:
+                data[submenu] = {index:{
+                                   'item':dish.dish,
+                                    'item_desc':dish.dish_desc
+                                }}
+
+            else:
+                data[submenu].update({index:{
+                                   'item':dish.dish,
+                                    'item_desc':dish.dish_desc
+                                }})
+    # Creating a sorted dictionary
+    data_sorted = OrderedDict()
+    for item in app.config['ORDERED_ITEMS']:
+        data_sorted[item] = data[item]
+
+
+    return data_sorted
 
 @app.route('/menu/',methods=['GET','POST'])
 def menu():
@@ -287,31 +323,9 @@ def menu():
         voter = session['voter_vote']
         code = session['event_code']
 
+    menu_data = get_menu(code)
 
-    event_desc = clean_text(
-    str(db.session.query(Menu.event_desc).filter(Menu.event_code == code).first()))
-
-    starter = [clean_text(str(item)) for item in db.session.query(Menu.dish).filter(and_(Menu.event_code == code,Menu.submenu=='starter')).all()]
-    starter_desc = [clean_text(str(item)) for item in db.session.query(Menu.dish_desc).filter(and_(Menu.event_code == code,Menu.submenu=='starter')).all()]
-
-    main = [clean_text(str(item)) for item in db.session.query(Menu.dish).filter(and_(Menu.event_code == code,Menu.submenu=='main')).all()]
-    main_desc = [clean_text(str(item)) for item in db.session.query(Menu.dish_desc).filter(and_(Menu.event_code == code,Menu.submenu=='main')).all()]
-    print("main----------")
-    print(main)
-    print("main desc-------")
-    print(main_desc)
-    desserts = [clean_text(str(item)) for item in db.session.query(Menu.dish).filter(and_(Menu.event_code == code,Menu.submenu=='desserts')).all()]
-    desserts_desc = [clean_text(str(item)) for item in db.session.query(Menu.dish_desc).filter(and_(Menu.event_code == code,Menu.submenu=='desserts')).all()]
-
-    drinks = [clean_text(str(item)) for item in db.session.query(Menu.dish).filter(and_(Menu.event_code == code,Menu.submenu=='drinks')).all()]
-    drinks_desc = [clean_text(str(item)) for item in db.session.query(Menu.dish_desc).filter(and_(Menu.event_code == code,Menu.submenu=='drinks')).all()]
-
-
-    return render_template('menu.html',starter = starter,starter_desc = starter_desc,
-                                       main=main,main_desc = main_desc,
-                                       desserts=desserts,desserts_desc = desserts_desc,
-                                       drinks=drinks,drinks_desc=drinks_desc,
-                                       event_desc=event_desc)
+    return render_template('menu.html',data=menu_data,translator=app.config['TRANSLATOR'])
 
 @app.route('/post_menu_voted',methods=['POST','GET'])
 def post_menu_voted():
